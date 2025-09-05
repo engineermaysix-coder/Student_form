@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)file:///C:/Users/ACER/Downloads/student_data_form.html -->
+<html lang="th"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ฟอร์มเก็บข้อมูลนักศึกษา</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+        
+        .header h1 {
+            position: relative;
+            z-index: 1;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            position: relative;
+            z-index: 1;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        
+        .form-section, .data-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            color: #2c3e50;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1em;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
+        }
+        
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+        
+        .student-list {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+        
+        .student-item {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .student-item:hover {
+            background: rgba(52, 152, 219, 0.05);
+            transform: translateX(5px);
+        }
+        
+        .student-item:last-child {
+            border-bottom: none;
+        }
+        
+        .student-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        
+        .student-details {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .status-studying {
+            background: #e8f5e8;
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+        
+        .status-thesis {
+            background: #fff3cd;
+            color: #f39c12;
+            border: 1px solid #f39c12;
+        }
+        
+        .status-graduated {
+            background: #d1ecf1;
+            color: #17a2b8;
+            border: 1px solid #17a2b8;
+        }
+        
+        .status-suspended {
+            background: #f8d7da;
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 40px;
+            font-style: italic;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.9;
+        }
+        
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .student-item:hover .delete-btn {
+            opacity: 1;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .form-section {
+            animation: slideInLeft 0.6s ease;
+        }
+        
+        .data-section {
+            animation: slideInRight 0.6s ease;
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 ระบบเก็บข้อมูลนักศึกษา</h1>
+            <p>จัดการและติดตามข้อมูลนักศึกษาอย่างเป็นระบบ</p>
+        </div>
+        
+        <div class="content">
+            <div class="form-section">
+                <h2 class="section-title">
+                    ➕ เพิ่มข้อมูลนักศึกษา
+                </h2>
+                
+                <form id="studentForm">
+                    <div class="form-group">
+                        <label for="studentName">ชื่อ-นามสกุล นักศึกษา *</label>
+                        <input type="text" id="studentName" name="studentName" required="" placeholder="เช่น นายสมชาย ใจดี">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentId">รหัสนักศึกษา *</label>
+                        <input type="text" id="studentId" name="studentId" required="" placeholder="เช่น 65123456789">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="advisor">อาจารย์ที่ปรึกษา *</label>
+                        <input type="text" id="advisor" name="advisor" required="" placeholder="เช่น ผศ.ดร.สมหญิง ใจดี">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="status">สถานะการศึกษา *</label>
+                        <select id="status" name="status" required="">
+                            <option value="">-- เลือกสถานะ --</option>
+                            <option value="กำลังศึกษา">กำลังศึกษา</option>
+                            <option value="ทำวิทยานิพนธ์">ทำวิทยานิพนธ์</option>
+                            <option value="สำเร็จการศึกษา">สำเร็จการศึกษาแล้ว</option>
+                            <option value="พักการศึกษา">พักการศึกษา</option>
+                            <option value="ลาออก">ลาออก</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">หมายเหตุเพิ่มเติม</label>
+                        <textarea id="notes" name="notes" placeholder="ข้อมูลเพิ่มเติม เช่น ปีที่เข้าศึกษา สาขา หรือข้อมูลอื่นๆ"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        ✅ บันทึกข้อมูล
+                    </button>
+                </form>
+            </div>
+            
+            <div class="data-section">
+                <h2 class="section-title">
+                    📊 ข้อมูลนักศึกษาทั้งหมด
+                </h2>
+                
+                <div class="stats" id="stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalCount">0</span>
+                        <span class="stat-label">ทั้งหมด</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="studyingCount">0</span>
+                        <span class="stat-label">กำลังศึกษา</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="graduatedCount">0</span>
+                        <span class="stat-label">จบแล้ว</span>
+                    </div>
+                </div>
+                
+                <div class="student-list" id="studentList">
+                    <div class="empty-state">
+                        ยังไม่มีข้อมูลนักศึกษา<br>
+                        กรุณาเพิ่มข้อมูลจากฟอร์มด้านซ้าย
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // เก็บข้อมูลนักศึกษาในหน่วยความจำ
+        let students = [];
+
+        // ฟังก์ชันแสดงสถิติ
+        function updateStats() {
+            const total = students.length;
+            const studying = students.filter(s => s.status === 'กำลังศึกษา' || s.status === 'ทำวิทยานิพนธ์').length;
+            const graduated = students.filter(s => s.status === 'สำเร็จการศึกษา').length;
+            
+            document.getElementById('totalCount').textContent = total;
+            document.getElementById('studyingCount').textContent = studying;
+            document.getElementById('graduatedCount').textContent = graduated;
+        }
+
+        // ฟังก์ชันแสดงรายการนักศึกษา
+        function displayStudents() {
+            const listElement = document.getElementById('studentList');
+            
+            if (students.length === 0) {
+                listElement.innerHTML = `
+                    <div class="empty-state">
+                        ยังไม่มีข้อมูลนักศึกษา<br>
+                        กรุณาเพิ่มข้อมูลจากฟอร์มด้านซ้าย
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            students.forEach((student, index) => {
+                const statusClass = {
+                    'กำลังศึกษา': 'status-studying',
+                    'ทำวิทยานิพนธ์': 'status-thesis',
+                    'สำเร็จการศึกษา': 'status-graduated',
+                    'พักการศึกษา': 'status-suspended',
+                    'ลาออก': 'status-suspended'
+                };
+                
+                html += `
+                    <div class="student-item">
+                        <button class="delete-btn" onclick="deleteStudent(${index})" title="ลบข้อมูล">✕</button>
+                        <div class="student-name">${student.name}</div>
+                        <div class="student-details">
+                            รหัส: ${student.id}<br>
+                            อาจารย์ที่ปรึกษา: ${student.advisor}
+                            ${student.notes ? `<br>หมายเหตุ: ${student.notes}` : ''}
+                        </div>
+                        <div class="status-badge ${statusClass[student.status] || 'status-studying'}">
+                            ${student.status}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            listElement.innerHTML = html;
+            updateStats();
+        }
+
+        // ฟังก์ชันเพิ่มนักศึกษา
+        function addStudent(studentData) {
+            students.push(studentData);
+            displayStudents();
+        }
+
+        // ฟังก์ชันลบนักศึกษา
+        function deleteStudent(index) {
+            if (confirm('คุณต้องการลบข้อมูลนักศึกษาคนนี้หรือไม่?')) {
+                students.splice(index, 1);
+                displayStudents();
+            }
+        }
+
+        // จัดการฟอร์ม
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const studentData = {
+                name: formData.get('studentName'),
+                id: formData.get('studentId'),
+                advisor: formData.get('advisor'),
+                status: formData.get('status'),
+                notes: formData.get('notes')
+            };
+            
+            // ตรวจสอบรหัสซ้ำ
+            if (students.find(s => s.id === studentData.id)) {
+                alert('รหัสนักศึกษานี้มีอยู่ในระบบแล้ว กรุณาตรวจสอบใหม่');
+                return;
+            }
+            
+            addStudent(studentData);
+            this.reset();
+            
+            // แสดงข้อความยืนยัน
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '✅ บันทึกเรียบร้อย';
+            submitBtn.style.background = 'linear-gradient(135deg, #27ae60, #229954)';
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.style.background = 'linear-gradient(135deg, #3498db, #2980b9)';
+            }, 2000);
+        });
+
+        // เรียกใช้ฟังก์ชันแสดงข้อมูลครั้งแรก
+        displayStudents();
+    </script>
+
+</body></html>
